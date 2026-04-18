@@ -11,6 +11,11 @@ export default async function handler(req, res) {
   try {
     const { prompt } = req.body;
 
+        // Guard: kung walang prompt, ibalik agad ang error
+    if (!prompt) {
+      return res.status(400).json({ error: 'No prompt received', body: req.body });
+    }
+
     // Call Google Gemini API using the secret key stored in Vercel environment variables
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
