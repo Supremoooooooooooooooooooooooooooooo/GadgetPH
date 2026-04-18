@@ -1,11 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-PH">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GadgetPick PH — Find the right gadget for you</title>
-<meta name="description" content="AI-powered gadget recommender for Filipinos. Tell us your budget and needs, we'll find the best gadget for you.">
+
+<!-- ═══════════════════════════════════════════
+     SEO: Title & Meta
+════════════════════════════════════════════ -->
+<title>GadgetPick PH – Best Budget Phone, Laptop & Gadget Finder Philippines 2026</title>
+<meta name="description" content="Find the best budget phone, laptop, tablet, or gadget in the Philippines. Tell us your budget (₱3K–₱50K+) and needs — our AI recommends the perfect gadget available on Shopee & Lazada PH. Free to use!">
+<meta name="keywords" content="budget phone philippines 2026, best phone under 5000 pesos, best phone under 10000 pesos, budget laptop philippines, gadget recommender philippines, best gadget under 5k ph, affordable smartphone philippines, best budget smartphone 2026, shopee gadget recommendations, lazada budget phones">
+<meta name="robots" content="index, follow">
+<meta name="author" content="GadgetPick PH">
+<meta name="theme-color" content="#C8F060">
+<link rel="canonical" href="https://gadgetpick.vercel.app/">
+
+<!-- ═══════════════════════════════════════════
+     SEO: Open Graph (Facebook, Messenger, Viber)
+════════════════════════════════════════════ -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GadgetPick PH">
+<meta property="og:title" content="GadgetPick PH – AI Gadget Recommender for Filipinos">
+<meta property="og:description" content="Anong gadget ang tamang para sa budget mo? I-enter ang budget at needs mo — AI na ang bahala. Budget phones, laptops, tablets & more sa Shopee at Lazada PH.">
+<meta property="og:url" content="https://gadgetpick.vercel.app/">
+<meta property="og:image" content="https://gadgetpick.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_PH">
+
+<!-- ═══════════════════════════════════════════
+     SEO: Twitter / X Card
+════════════════════════════════════════════ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GadgetPick PH – Find the Best Gadget for Your Budget">
+<meta name="twitter:description" content="AI-powered gadget recommender for Filipinos. Budget phones, laptops & more — with direct Shopee & Lazada links.">
+<meta name="twitter:image" content="https://gadgetpick.vercel.app/og-image.png">
+
+<!-- ═══════════════════════════════════════════
+     SEO: Schema.org Structured Data
+════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://gadgetpick.vercel.app/#app",
+      "name": "GadgetPick PH",
+      "description": "AI-powered gadget recommender for Filipinos. Find the best budget phone, laptop, tablet, TWS earphones, and smartwatch available on Shopee and Lazada Philippines.",
+      "url": "https://gadgetpick.vercel.app/",
+      "applicationCategory": "ShoppingApplication",
+      "operatingSystem": "Web Browser",
+      "browserRequirements": "Requires JavaScript",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "PHP",
+        "description": "Free to use"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Philippines"
+      },
+      "inLanguage": "en-PH",
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Filipino consumers looking for budget gadgets"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://gadgetpick.vercel.app/#website",
+      "name": "GadgetPick PH",
+      "url": "https://gadgetpick.vercel.app/",
+      "description": "Find the best budget gadgets in the Philippines",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://gadgetpick.vercel.app/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the best budget phone under ₱5,000 in the Philippines?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use GadgetPick PH to get AI-powered recommendations for the best budget phones under ₱5,000 available on Shopee and Lazada Philippines. Our AI considers your specific needs like battery life, camera, or gaming performance."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does GadgetPick PH work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply select your gadget type (phone, laptop, tablet, etc.), what you'll use it for, and enter your budget range in Philippine Peso. Our AI instantly recommends the top 3 gadgets that match your needs with direct links to Shopee and Lazada."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is GadgetPick PH free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! GadgetPick PH is completely free to use. No sign-up required."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- ═══════════════════════════════════════════
+     Fonts & Styles
+════════════════════════════════════════════ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -190,6 +304,16 @@
   .hero-title .line2 { color: var(--muted); }
   .hero-sub { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 420px; }
 
+  /* ── SEO KEYWORD PILLS (visible to Google, subtle to users) ── */
+  .seo-tags {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; margin-bottom: 0;
+  }
+  .seo-tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 9px;
+    color: var(--faint2); border: 1px solid var(--faint);
+    padding: 2px 8px; border-radius: 100px;
+  }
+
   /* ── FORM STEPS ── */
   .step-form { display: flex; flex-direction: column; gap: 1px; margin-bottom: 1.25rem; }
   .step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color 0.2s; }
@@ -289,6 +413,35 @@
 
   .error-box { background: rgba(226,75,74,0.08); border: 1px solid rgba(226,75,74,0.2); border-radius: var(--radius); padding: 1rem 1.25rem; color: #F09595; font-size: 12px; font-family: 'IBM Plex Mono', monospace; }
 
+  /* ── SEO FOOTER ── */
+  .seo-footer {
+    position: relative; z-index: 1;
+    max-width: 900px; margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+    border-top: 1px solid var(--border);
+  }
+  .seo-footer h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; color: var(--muted); margin-bottom: 1rem;
+  }
+  .seo-footer p {
+    font-size: 13px; color: var(--faint2); line-height: 1.8; max-width: 600px; margin-bottom: 1.5rem;
+  }
+  .seo-footer h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--faint2); letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 0.75rem; margin-top: 1.5rem;
+  }
+  .seo-links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .seo-link {
+    font-size: 11px; color: var(--faint2); border: 1px solid var(--faint);
+    padding: 4px 10px; border-radius: 6px; text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    transition: color 0.15s, border-color 0.15s;
+    cursor: pointer;
+  }
+  .seo-link:hover { color: var(--accent); border-color: rgba(200,240,96,0.3); }
+
   /* ── MOBILE ── */
   @media (max-width: 768px) {
     .phone-col { display: none; }
@@ -303,6 +456,7 @@
     .buy-row { flex-direction: column; align-items: stretch; }
     .buy-btn { justify-content: center; }
     .buy-label { margin-left: 0; text-align: center; }
+    .seo-footer { padding: 2rem 1rem 3rem; }
   }
 </style>
 </head>
@@ -321,7 +475,7 @@
       <div class="phone-screen">
         <div class="phone-logo">
           <div class="phone-logo-mark">
-            <svg width="9" height="9" viewBox="0 0 18 18" fill="none">
+            <svg width="9" height="9" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M9 2L3 6v6l6 4 6-4V6L9 2z" fill="#0A0A08"/>
               <circle cx="9" cy="9" r="2.5" fill="#0A0A08"/>
             </svg>
@@ -365,13 +519,13 @@
 <div class="layout">
 
   <!-- LEFT: sticky phone -->
-  <div class="phone-col" id="phoneCol">
+  <div class="phone-col" id="phoneCol" aria-hidden="true">
     <div class="phone" id="stickyPhone">
       <div class="phone-notch"></div>
       <div class="phone-screen">
         <div class="phone-logo">
           <div class="phone-logo-mark">
-            <svg width="9" height="9" viewBox="0 0 18 18" fill="none">
+            <svg width="9" height="9" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M9 2L3 6v6l6 4 6-4V6L9 2z" fill="#0A0A08"/>
               <circle cx="9" cy="9" r="2.5" fill="#0A0A08"/>
             </svg>
@@ -412,12 +566,12 @@
   </div>
 
   <!-- RIGHT: form -->
-  <div class="form-col" id="formCol">
+  <main class="form-col" id="formCol">
 
-    <div class="topbar">
+    <header class="topbar">
       <div class="logo">
         <div class="logo-mark">
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
             <path d="M9 2L3 6v6l6 4 6-4V6L9 2z" fill="#0A0A08"/>
             <circle cx="9" cy="9" r="2.5" fill="#0A0A08"/>
           </svg>
@@ -425,34 +579,47 @@
         <div class="logo-text">Gadget<span>Pick</span> PH</div>
       </div>
       <div class="top-tag">v2.0 · AI-powered</div>
-    </div>
+    </header>
 
-    <div class="hero">
+    <!-- ══ HERO — H1 with keyword-rich subtitle ══ -->
+    <section class="hero" aria-label="Hero">
       <div class="hero-eyebrow">
-        <div class="eyebrow-dot"></div>
-        <div class="eyebrow-text">Personalized for you</div>
+        <div class="eyebrow-dot" aria-hidden="true"></div>
+        <div class="eyebrow-text">Personalized for Filipinos</div>
       </div>
       <h1 class="hero-title">
         Find the <em>right</em><br>
         <span class="line2">gadget for you.</span>
       </h1>
-      <p class="hero-sub">Tell us your budget and what you need it for — our AI handles the research. Free for everyone.</p>
-    </div>
+      <p class="hero-sub">
+        Looking for the best <strong style="color:var(--text);font-weight:600">budget phone, laptop, or gadget</strong> in the Philippines?
+        Tell us your budget and needs — our AI finds the top picks available on Shopee &amp; Lazada PH. Free for everyone.
+      </p>
+      <!-- SEO keyword tags — visible but subtle, real content for Google -->
+      <div class="seo-tags" aria-label="Popular searches">
+        <span class="seo-tag">Budget phones under ₱5K</span>
+        <span class="seo-tag">Laptops under ₱20K</span>
+        <span class="seo-tag">Gaming phones PH</span>
+        <span class="seo-tag">Best tablets 2026</span>
+        <span class="seo-tag">TWS earphones PH</span>
+      </div>
+    </section>
 
-    <div class="step-form">
+    <!-- ══ FORM ══ -->
+    <form class="step-form" id="main-form" onsubmit="return false;" aria-label="Gadget finder form">
 
       <div class="step" data-phone-section="ps-type">
         <div class="step-header">
           <span class="step-title">What type of gadget?</span>
         </div>
         <div class="step-body">
-          <div class="chips" id="type-chips">
-            <div class="chip active" data-val="Smartphone">Smartphone</div>
-            <div class="chip" data-val="Laptop">Laptop</div>
-            <div class="chip" data-val="Tablet">Tablet</div>
-            <div class="chip" data-val="TWS Earphones">TWS / Earphones</div>
-            <div class="chip" data-val="Smartwatch">Smartwatch</div>
-            <div class="chip" data-val="Camera">Camera</div>
+          <div class="chips" id="type-chips" role="group" aria-label="Gadget type">
+            <div class="chip active" data-val="Smartphone" role="button" tabindex="0" aria-pressed="true">Smartphone</div>
+            <div class="chip" data-val="Laptop" role="button" tabindex="0" aria-pressed="false">Laptop</div>
+            <div class="chip" data-val="Tablet" role="button" tabindex="0" aria-pressed="false">Tablet</div>
+            <div class="chip" data-val="TWS Earphones" role="button" tabindex="0" aria-pressed="false">TWS / Earphones</div>
+            <div class="chip" data-val="Smartwatch" role="button" tabindex="0" aria-pressed="false">Smartwatch</div>
+            <div class="chip" data-val="Camera" role="button" tabindex="0" aria-pressed="false">Camera</div>
           </div>
         </div>
       </div>
@@ -462,35 +629,35 @@
           <span class="step-title">What will you use it for?</span>
         </div>
         <div class="step-body">
-          <div class="chips" id="use-chips">
-            <div class="chip active" data-val="social media and videos">Social media &amp; videos</div>
-            <div class="chip" data-val="work or school">Work / School</div>
-            <div class="chip" data-val="gaming">Gaming</div>
-            <div class="chip" data-val="photography and content creation">Photography</div>
-            <div class="chip" data-val="music and entertainment">Music &amp; Entertainment</div>
+          <div class="chips" id="use-chips" role="group" aria-label="Use case">
+            <div class="chip active" data-val="social media and videos" role="button" tabindex="0" aria-pressed="true">Social media &amp; videos</div>
+            <div class="chip" data-val="work or school" role="button" tabindex="0" aria-pressed="false">Work / School</div>
+            <div class="chip" data-val="gaming" role="button" tabindex="0" aria-pressed="false">Gaming</div>
+            <div class="chip" data-val="photography and content creation" role="button" tabindex="0" aria-pressed="false">Photography</div>
+            <div class="chip" data-val="music and entertainment" role="button" tabindex="0" aria-pressed="false">Music &amp; Entertainment</div>
           </div>
         </div>
       </div>
 
       <div class="step" data-phone-section="ps-budget">
         <div class="step-header">
-          <span class="step-title">Your budget?</span>
+          <span class="step-title">Your budget? <span style="color:var(--faint2);font-size:11px;font-weight:400">(Philippine Peso)</span></span>
         </div>
         <div class="step-body">
           <div class="budget-row">
             <div class="budget-field">
-              <label>Minimum</label>
+              <label for="budget-min">Minimum</label>
               <div class="input-wrap">
-                <span class="peso">₱</span>
-                <input type="number" id="budget-min" placeholder="5,000" min="0">
+                <span class="peso" aria-hidden="true">₱</span>
+                <input type="number" id="budget-min" name="budget-min" placeholder="5,000" min="0" aria-label="Minimum budget in Philippine Peso">
               </div>
             </div>
-            <div class="budget-sep">—</div>
+            <div class="budget-sep" aria-hidden="true">—</div>
             <div class="budget-field">
-              <label>Maximum</label>
+              <label for="budget-max">Maximum</label>
               <div class="input-wrap">
-                <span class="peso">₱</span>
-                <input type="number" id="budget-max" placeholder="20,000" min="0">
+                <span class="peso" aria-hidden="true">₱</span>
+                <input type="number" id="budget-max" name="budget-max" placeholder="20,000" min="0" aria-label="Maximum budget in Philippine Peso">
               </div>
             </div>
           </div>
@@ -502,20 +669,52 @@
           <span class="step-title">Anything specific? <span style="color:var(--faint2);font-weight:400">(optional)</span></span>
         </div>
         <div class="step-body">
-          <input class="text-input" type="text" id="specific-input"
-            placeholder="e.g. long battery life, Samsung, lightweight, great camera..."/>
+          <input class="text-input" type="text" id="specific-input" name="specific"
+            placeholder="e.g. long battery life, Samsung, lightweight, great camera..."
+            aria-label="Specific requirements or preferences"/>
         </div>
       </div>
 
-    </div>
+    </form>
 
-    <button class="submit-btn" id="find-btn" onclick="findGadget()">
+    <button class="submit-btn" id="find-btn" onclick="findGadget()" aria-label="Find my gadget recommendations">
       <span id="btn-text">Find my gadget</span>
     </button>
 
-    <div id="results-area"></div>
-  </div>
+    <div id="results-area" aria-live="polite" aria-label="Gadget recommendations"></div>
+
+  </main>
 </div>
+
+<!-- ══ SEO FOOTER — keyword-rich content for Google ══ -->
+<footer class="seo-footer" aria-label="About GadgetPick PH">
+  <h2>The easiest way to find your next gadget in the Philippines</h2>
+  <p>
+    GadgetPick PH is a free AI-powered gadget recommender built for Filipinos.
+    Whether you're looking for the <strong style="color:var(--muted)">best budget phone under ₱5,000</strong>,
+    an <strong style="color:var(--muted)">affordable laptop for school or work</strong>,
+    or a <strong style="color:var(--muted)">gaming smartphone under ₱15,000</strong> —
+    just enter your budget and needs and our AI will find the best options currently available
+    on Shopee and Lazada Philippines.
+  </p>
+
+  <h3>Popular searches</h3>
+  <div class="seo-links" role="list">
+    <span class="seo-link" role="listitem" onclick="quickSearch('Smartphone','social media and videos',3000,7000,'')">Best phones under ₱7K</span>
+    <span class="seo-link" role="listitem" onclick="quickSearch('Smartphone','social media and videos',5000,10000,'')">Best phones under ₱10K</span>
+    <span class="seo-link" role="listitem" onclick="quickSearch('Smartphone','gaming',8000,15000,'')">Gaming phones under ₱15K</span>
+    <span class="seo-link" role="listitem" onclick="quickSearch('Laptop','work or school',15000,25000,'')">Budget laptops under ₱25K</span>
+    <span class="seo-link" role="listitem" onclick="quickSearch('Laptop','work or school',20000,35000,'lightweight')">Lightweight laptops PH</span>
+    <span class="seo-link" role="listitem" onclick="quickSearch('Tablet','work or school',8000,15000,'')">Best tablets Philippines</span>
+    <span class="seo-link" role="listitem" onclick="quickSearch('TWS Earphones','music and entertainment',500,2000,'')">Budget TWS earphones</span>
+    <span class="seo-link" role="listitem" onclick="quickSearch('Smartphone','photography and content creation',10000,20000,'great camera')">Best camera phones PH</span>
+  </div>
+
+  <h3>About</h3>
+  <p style="font-size:12px;">
+    GadgetPick PH · AI-powered · Free to use · Shopee &amp; Lazada PH · Philippines · 2026
+  </p>
+</footer>
 
 <script>
   const SHOPEE_AFFILIATE_ID = 'SHOPEE_ID_HERE';
@@ -529,6 +728,33 @@
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  /* ── QUICK SEARCH (from footer links) ── */
+  function quickSearch(type, use, min, max, specific) {
+    // Set form values
+    selectedType = type;
+    selectedUse  = use;
+    document.getElementById('budget-min').value = min;
+    document.getElementById('budget-max').value = max;
+    document.getElementById('specific-input').value = specific;
+
+    // Update chips UI
+    document.querySelectorAll('#type-chips .chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.val === type);
+    });
+    document.querySelectorAll('#use-chips .chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.val === use);
+    });
+
+    // Sync phone widget
+    document.getElementById('pm-min').textContent = '₱' + Number(min).toLocaleString();
+    document.getElementById('pm-max').textContent = '₱' + Number(max).toLocaleString();
+    document.getElementById('pm-specific').textContent = specific || 'e.g. long battery...';
+
+    // Scroll to top & search
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(findGadget, 500);
   }
 
   /* ── INTRO ANIMATION ── */
@@ -577,27 +803,31 @@
   const typeShortMap = { 'Smartphone': 'Smartphone', 'Laptop': 'Laptop', 'Tablet': 'Tablet', 'TWS Earphones': 'TWS', 'Smartwatch': 'Watch', 'Camera': 'Camera' };
   document.querySelectorAll('#type-chips .chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      document.querySelectorAll('#type-chips .chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('#type-chips .chip').forEach(c => { c.classList.remove('active'); c.setAttribute('aria-pressed','false'); });
       chip.classList.add('active');
+      chip.setAttribute('aria-pressed','true');
       selectedType = chip.dataset.val;
       const short = typeShortMap[chip.dataset.val] || chip.dataset.val.split(' ')[0];
       document.querySelectorAll('#pm-type-chips .phone-mini-chip').forEach(pc => {
         pc.classList.toggle('active', pc.textContent === short);
       });
     });
+    chip.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chip.click(); } });
   });
 
   const useShortMap = { 'social media and videos': 'Social', 'work or school': 'Work', 'gaming': 'Gaming', 'photography and content creation': 'Photo', 'music and entertainment': 'Music' };
   document.querySelectorAll('#use-chips .chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      document.querySelectorAll('#use-chips .chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('#use-chips .chip').forEach(c => { c.classList.remove('active'); c.setAttribute('aria-pressed','false'); });
       chip.classList.add('active');
+      chip.setAttribute('aria-pressed','true');
       selectedUse = chip.dataset.val;
       const short = useShortMap[chip.dataset.val] || chip.dataset.val.split(' ')[0];
       document.querySelectorAll('#pm-use-chips .phone-mini-chip').forEach(pc => {
         pc.classList.toggle('active', pc.textContent === short);
       });
     });
+    chip.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chip.click(); } });
   });
 
   document.getElementById('budget-min').addEventListener('input', function() {
@@ -631,13 +861,14 @@
     const budgetStr = `₱${Number(budgetMin).toLocaleString()} to ₱${Number(budgetMax).toLocaleString()}`;
 
     btn.disabled = true;
-    btnText.innerHTML = '<span class="spinner"></span>';
+    btn.setAttribute('aria-busy', 'true');
+    btnText.innerHTML = '<span class="spinner" aria-hidden="true"></span>';
     ra.innerHTML = `
       <div class="results-section">
-        <div class="loading-card">
-          <div style="font-size:24px">⚡</div>
+        <div class="loading-card" role="status" aria-label="Loading recommendations">
+          <div style="font-size:24px" aria-hidden="true">⚡</div>
           <div class="loading-text">Finding the best ${selectedType} for you...</div>
-          <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+          <div class="loading-bar" aria-hidden="true"><div class="loading-bar-fill"></div></div>
         </div>
       </div>`;
 
@@ -683,14 +914,15 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
 
       gadgets.forEach((gadget, index) => {
         const rankClass = index === 0 ? 'rank-best' : index === 1 ? 'rank-runner' : 'rank-alt';
-        const card = document.createElement('div');
+        const card = document.createElement('article');
         card.className = index === 0 ? 'result-card best' : 'result-card';
         card.style.animationDelay = (index * 0.12) + 's';
+        card.setAttribute('aria-label', `${gadget.rank}: ${gadget.name} at ${gadget.price}`);
         card.innerHTML = `
           <div class="rc-top">
             <div class="rc-left">
               <div class="rc-rank ${rankClass}">${gadget.rank}</div>
-              <div class="rc-name">${gadget.name}</div>
+              <h2 class="rc-name">${gadget.name}</h2>
               <div class="rc-type">${gadget.type}</div>
             </div>
             <div class="rc-right">
@@ -698,15 +930,15 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
               <div class="rc-match">${gadget.match}</div>
             </div>
           </div>
-          <div class="rc-specs">${gadget.specs.map(s => `<span class="spec">${s}</span>`).join('')}</div>
-          <div class="rc-why">${gadget.why}</div>
+          <div class="rc-specs" aria-label="Specifications">${gadget.specs.map(s => `<span class="spec">${s}</span>`).join('')}</div>
+          <p class="rc-why">${gadget.why}</p>
           <div class="buy-row">
-            <a href="${buildShopeeLink(gadget.shopee_search || gadget.name)}" target="_blank" class="buy-btn buy-shopee">
-              <svg width="13" height="13" viewBox="0 0 14 14"><rect width="14" height="14" rx="3" fill="rgba(255,255,255,0.2)"/><text x="7" y="10.5" text-anchor="middle" font-size="8" fill="white" font-weight="700" font-family="sans-serif">S</text></svg>
+            <a href="${buildShopeeLink(gadget.shopee_search || gadget.name)}" target="_blank" rel="noopener noreferrer sponsored" class="buy-btn buy-shopee" aria-label="View ${gadget.name} on Shopee Philippines">
+              <svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true"><rect width="14" height="14" rx="3" fill="rgba(255,255,255,0.2)"/><text x="7" y="10.5" text-anchor="middle" font-size="8" fill="white" font-weight="700" font-family="sans-serif">S</text></svg>
               View on Shopee
             </a>
-            <a href="${buildLazadaLink(gadget.lazada_search || gadget.name)}" target="_blank" class="buy-btn buy-lazada">
-              <svg width="13" height="13" viewBox="0 0 14 14"><rect width="14" height="14" rx="3" fill="rgba(255,255,255,0.2)"/><text x="7" y="10.5" text-anchor="middle" font-size="8" fill="white" font-weight="700" font-family="sans-serif">L</text></svg>
+            <a href="${buildLazadaLink(gadget.lazada_search || gadget.name)}" target="_blank" rel="noopener noreferrer sponsored" class="buy-btn buy-lazada" aria-label="View ${gadget.name} on Lazada Philippines">
+              <svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true"><rect width="14" height="14" rx="3" fill="rgba(255,255,255,0.2)"/><text x="7" y="10.5" text-anchor="middle" font-size="8" fill="white" font-weight="700" font-family="sans-serif">L</text></svg>
               View on Lazada
             </a>
             <span class="buy-label">* Shop links</span>
@@ -715,10 +947,11 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
       });
 
     } catch (err) {
-      ra.innerHTML = `<div class="error-box">// ERROR: Could not load recommendations. Please try again.</div>`;
+      ra.innerHTML = `<div class="error-box" role="alert">// ERROR: Could not load recommendations. Please try again.</div>`;
     }
 
     btn.disabled = false;
+    btn.setAttribute('aria-busy', 'false');
     btnText.textContent = 'Search again';
   }
 </script>
