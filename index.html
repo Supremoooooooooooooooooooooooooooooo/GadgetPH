@@ -306,6 +306,34 @@
   @keyframes loadbar { 0% { width: 0%; margin-left: 0; } 50% { width: 60%; margin-left: 20%; } 100% { width: 0%; margin-left: 100%; } }
 
   .error-box { background: rgba(226,75,74,0.08); border: 1px solid rgba(226,75,74,0.2); border-radius: var(--radius); padding: 1rem 1.25rem; color: #F09595; font-size: 12px; font-family: 'IBM Plex Mono', monospace; }
+
+  /* ── Mobile responsive ── */
+  @media (max-width: 768px) {
+    .phone-col { display: none; }
+    .intro-stage { display: none !important; }
+
+    .layout {
+      flex-direction: column;
+      padding: 0 1rem;
+    }
+
+    .form-col {
+      padding: 2rem 0 4rem;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .hero-title { font-size: 28px; }
+
+    .budget-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .rc-name { font-size: 16px; }
+    .rc-price { font-size: 16px; }
+
+    .buy-row { flex-direction: column; align-items: stretch; }
+    .buy-btn { justify-content: center; }
+    .buy-label { margin-left: 0; text-align: center; }
+  }
 </style>
 </head>
 <body>
@@ -545,6 +573,14 @@
     const phoneCol    = document.getElementById('phoneCol');
     const formCol     = document.getElementById('formCol');
 
+    // Skip intro animation on mobile
+    if (window.innerWidth <= 768) {
+      introStage.classList.add('done');
+      formCol.style.opacity = '1';
+      formCol.style.transform = 'none';
+      return;
+    }
+
     setTimeout(() => {
       /* Calculate the horizontal center of the left phone column so the
          intro phone slides exactly on top of the sticky phone */
@@ -679,15 +715,8 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
         body: JSON.stringify({ prompt })
       });
 
-      const data = await response.json();
+      const data    = await response.json();
       const rawText = data.text || '';
-      
-      // TEMP DEBUG
-      console.log('Server response:', data);
-      console.log('Raw text:', rawText);
-      
-      if (!rawText) throw new Error('Empty response from AI: ' + JSON.stringify(data));
-      
       const gadgets = JSON.parse(rawText.replace(/```json|```/g, '').trim());
 
       /* Render results */
@@ -735,8 +764,7 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
       });
 
     } catch (err) {
-      ra.innerHTML = `<div class="error-box">// ERROR: ${err.message}</div>`;
-      console.error('Full error:', err);
+      ra.innerHTML = `<div class="error-box">// ERROR: Could not load recommendations. Please try again.</div>`;
     }
 
     /* Re-enable button */
