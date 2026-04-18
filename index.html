@@ -7,17 +7,15 @@
 <meta name="description" content="AI-powered gadget recommender for Filipinos. Tell us your budget and needs, we'll find the best gadget for you.">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  /* ── Reset ── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ── Design tokens ── */
   :root {
     --bg:       #0A0A08;
     --surface:  #111110;
     --surface2: #1A1A18;
     --surface3: #232320;
-    --accent:   #C8F060;   /* lime green — primary brand color */
-    --gold:     #E8B84B;   /* used for runner-up badge */
+    --accent:   #C8F060;
+    --gold:     #E8B84B;
     --text:     #F0EDE6;
     --muted:    #888880;
     --faint:    #333330;
@@ -33,13 +31,10 @@
   html, body { height: 100%; overflow-x: hidden; }
   body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); }
 
-  /* ── Subtle grain texture overlay ── */
   .noise {
     position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-
-  /* ── Ambient glow blobs (top-left and bottom-right) ── */
   .glow-tl {
     position: fixed; width: 500px; height: 500px; border-radius: 50%;
     background: radial-gradient(circle, rgba(200,240,96,0.07) 0%, transparent 70%);
@@ -51,95 +46,55 @@
     bottom: -100px; right: -100px; pointer-events: none; z-index: 0;
   }
 
-  /* ════════════════════════════════════════
-     INTRO STAGE
-     Fullscreen overlay that holds the
-     animated phone. Hidden after sequence.
-  ════════════════════════════════════════ */
+  /* ── INTRO STAGE ── */
   .intro-stage {
     position: fixed; inset: 0; z-index: 100;
     display: flex; align-items: center; justify-content: center;
-    background: var(--bg);
-    pointer-events: none;
+    background: var(--bg); pointer-events: none;
   }
   .intro-stage.done { display: none; }
 
-  /* Phase 1: phone zooms in from large to normal size at screen center */
   .phone-positioner {
-    position: absolute;
-    left: 50%; top: 50%;
-    transform: translate(-50%, -50%) scale(3.5);
-    opacity: 0;
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%) scale(3.5); opacity: 0;
     animation: phoneZoomIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
   }
-  @keyframes phoneZoomIn {
-    to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-  }
+  @keyframes phoneZoomIn { to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
 
-  /* Phase 2: phone slides from center to its final left-column position.
-     --phone-final-left is set dynamically in JS based on actual DOM position. */
   .phone-positioner.slide-to-left {
     animation: phoneSlideLeft 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
   @keyframes phoneSlideLeft {
-    from { left: 50%;                      top: 50%; transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    to   { left: var(--phone-final-left);  top: 50%; transform: translate(0, -50%)    scale(1); opacity: 1; }
+    from { left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    to   { left: var(--phone-final-left); top: 50%; transform: translate(0, -50%) scale(1); opacity: 1; }
   }
 
-  /* ════════════════════════════════════════
-     MAIN LAYOUT — Two-column side-by-side
-     Left:  sticky phone (decorative)
-     Right: scrollable form + results
-  ════════════════════════════════════════ */
+  /* ── LAYOUT ── */
   .layout {
-    position: relative; z-index: 1;
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
+    position: relative; z-index: 1; min-height: 100vh;
+    display: flex; align-items: flex-start;
+    max-width: 900px; margin: 0 auto; padding: 0 1.5rem;
   }
 
-  /* Left column — phone stays in view while user scrolls the form */
   .phone-col {
-    width: 240px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
+    width: 240px; flex-shrink: 0; position: sticky; top: 0;
+    height: 100vh; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
   }
-  .phone-col.visible {
-    opacity: 1;
-    pointer-events: auto;
-    transition: opacity 0.3s ease;
-  }
+  .phone-col.visible { opacity: 1; pointer-events: auto; transition: opacity 0.3s ease; }
 
-  /* Right column — form slides in from the right after the phone settles */
   .form-col {
-    flex: 1;
-    min-width: 0;
-    padding: 2.5rem 0 5rem 2.5rem;
-    opacity: 0;
-    transform: translateX(48px);
+    flex: 1; min-width: 0; padding: 2.5rem 0 5rem 2.5rem;
+    opacity: 0; transform: translateX(48px);
     transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .form-col.visible { opacity: 1; transform: translateX(0); }
 
-  /* ════════════════════════════════════════
-     PHONE WIDGET (both intro + sticky)
-  ════════════════════════════════════════ */
+  /* ── PHONE WIDGET ── */
   .phone {
-    width: 200px; height: 390px;
-    background: var(--surface);
-    border: 2px solid var(--border2);
-    border-radius: 34px;
-    position: relative; overflow: hidden;
+    width: 200px; height: 420px;
+    background: var(--surface); border: 2px solid var(--border2);
+    border-radius: 34px; position: relative; overflow: hidden;
     box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 30px 70px rgba(0,0,0,0.7);
   }
   .phone-notch {
@@ -149,39 +104,65 @@
   .phone-screen {
     position: absolute; inset: 0;
     background: linear-gradient(160deg, #0f1a10 0%, #0A0A08 60%);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 2rem 1.25rem; gap: 9px;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 2.8rem 1rem 1rem; gap: 0;
   }
-  .phone-logo { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-  .phone-logo-mark {
-    width: 20px; height: 20px; background: var(--accent); border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .phone-logo-text { font-size: 11px; font-weight: 700; color: var(--text); }
+
+  .phone-logo { display: flex; align-items: center; gap: 5px; margin-bottom: 10px; align-self: flex-start; }
+  .phone-logo-mark { width: 16px; height: 16px; background: var(--accent); border-radius: 3px; display: flex; align-items: center; justify-content: center; }
+  .phone-logo-text { font-size: 10px; font-weight: 700; color: var(--text); }
   .phone-logo-text span { color: var(--accent); }
 
-  /* Loading bars inside the phone screen */
-  .phone-bar { height: 5px; border-radius: 3px; background: var(--surface2); width: 100%; overflow: hidden; }
-  .phone-bar-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+  .phone-section {
+    width: 100%; padding: 7px 8px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface2);
+    margin-bottom: 5px;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  }
+  .phone-section.highlighted {
+    border-color: rgba(200,240,96,0.5);
+    background: rgba(200,240,96,0.06);
+    box-shadow: 0 0 10px rgba(200,240,96,0.08);
+  }
+  .phone-section-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 8px;
+    color: var(--faint2); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.06em;
+    transition: color 0.25s;
+  }
+  .phone-section.highlighted .phone-section-label { color: var(--accent); }
 
-  /* Staggered bar fill animations (intro phone only) */
-  .pf1 { animation: barFill1 0.8s ease 1.3s both; }
-  .pf2 { animation: barFill2 0.7s ease 1.5s both; }
-  .pf3 { animation: barFill3 0.6s ease 1.7s both; }
-  @keyframes barFill1 { from { width: 0; } to { width: 75%; } }
-  @keyframes barFill2 { from { width: 0; } to { width: 52%; } }
-  @keyframes barFill3 { from { width: 0; } to { width: 88%; } }
+  .phone-mini-chips { display: flex; flex-wrap: wrap; gap: 3px; }
+  .phone-mini-chip {
+    height: 14px; padding: 0 6px; border-radius: 7px; font-size: 7px;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 500;
+    background: var(--surface3); color: var(--faint2);
+    border: 1px solid var(--border); display: flex; align-items: center;
+    transition: all 0.25s;
+  }
+  .phone-mini-chip.active {
+    background: rgba(200,240,96,0.15); color: var(--accent);
+    border-color: rgba(200,240,96,0.3);
+  }
 
-  .phone-chip-row { display: flex; gap: 4px; width: 100%; flex-wrap: wrap; }
-  .phone-chip { height: 18px; border-radius: 9px; background: var(--surface2); border: 1px solid var(--border); }
-  .phone-chip.on { background: rgba(200,240,96,0.15); border-color: rgba(200,240,96,0.3); }
-  .w1 { width: 55px; } .w2 { width: 42px; } .w3 { width: 68px; }
+  .phone-budget-row { display: flex; gap: 4px; }
+  .phone-budget-box {
+    flex: 1; height: 18px; border-radius: 4px;
+    background: var(--surface3); border: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 5px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 7px; color: var(--faint2);
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .phone-section.highlighted .phone-budget-box { border-color: rgba(200,240,96,0.3); color: rgba(200,240,96,0.6); }
 
-  .phone-card { background: var(--surface2); border: 1px solid var(--border2); border-radius: 9px; padding: 9px; width: 100%; }
-  .pcl { height: 6px; border-radius: 3px; background: var(--surface3); margin-bottom: 5px; }
-  .pcl:last-child { margin-bottom: 0; }
-  .pcl.ac { background: rgba(200,240,96,0.2); width: 60%; }
-  .pcl.sh { width: 45%; }
+  .phone-mini-input {
+    width: 100%; height: 18px; border-radius: 4px;
+    background: var(--surface3); border: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 6px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 7px; color: var(--faint2);
+    transition: border-color 0.25s;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .phone-section.highlighted .phone-mini-input { border-color: rgba(200,240,96,0.3); }
 
   .phone-glow {
     position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);
@@ -190,15 +171,7 @@
     pointer-events: none;
   }
 
-  /* Accent bar that moves to highlight which step the user is hovering */
-  .phone-highlight {
-    position: absolute; left: 12px; right: 12px; height: 3px;
-    border-radius: 2px; background: var(--accent);
-    transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
-    opacity: 0;
-  }
-
-  /* ── Top bar ── */
+  /* ── TOP BAR ── */
   .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
   .logo { display: flex; align-items: center; gap: 10px; }
   .logo-mark { width: 30px; height: 30px; background: var(--accent); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
@@ -206,7 +179,7 @@
   .logo-text span { color: var(--accent); }
   .top-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); border: 1px solid var(--border2); padding: 3px 9px; border-radius: 100px; }
 
-  /* ── Hero ── */
+  /* ── HERO ── */
   .hero { margin-bottom: 2rem; }
   .hero-eyebrow { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   .eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: blink 2s ease infinite; }
@@ -217,18 +190,14 @@
   .hero-title .line2 { color: var(--muted); }
   .hero-sub { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 420px; }
 
-  /* ════════════════════════════════════════
-     FORM STEPS
-  ════════════════════════════════════════ */
+  /* ── FORM STEPS ── */
   .step-form { display: flex; flex-direction: column; gap: 1px; margin-bottom: 1.25rem; }
   .step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color 0.2s; }
   .step:hover { border-color: var(--border2); }
-  .step-header { padding: 1rem 1.25rem; display: flex; align-items: center; gap: 10px; }
-  .step-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent); font-weight: 500; background: rgba(200,240,96,0.1); border: 1px solid rgba(200,240,96,0.2); border-radius: 4px; padding: 2px 7px; flex-shrink: 0; }
+  .step-header { padding: 1rem 1.25rem; display: flex; align-items: center; }
   .step-title { font-size: 13px; font-weight: 600; color: var(--text); }
   .step-body { padding: 0 1.25rem 1.25rem; }
 
-  /* Selectable pill chips */
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip { font-size: 12px; font-weight: 500; padding: 6px 13px; border-radius: 100px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; user-select: none; }
   .chip:hover { border-color: var(--border2); color: var(--text); }
@@ -238,27 +207,45 @@
   .text-input:focus { border-color: rgba(200,240,96,0.4); }
   .text-input::placeholder { color: var(--faint2); }
 
-  /* Budget selector grid */
-  .budget-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-  .budget-btn { padding: 11px 6px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); cursor: pointer; text-align: center; transition: all 0.15s; }
-  .budget-btn:hover { border-color: var(--border2); }
-  .budget-btn.active { background: rgba(200,240,96,0.1); border-color: rgba(200,240,96,0.35); }
-  .budget-btn .amt { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: -0.02em; }
-  .budget-btn.active .amt { color: var(--accent); }
-  .budget-btn .lbl { font-size: 10px; color: var(--faint2); margin-top: 2px; font-family: 'IBM Plex Mono', monospace; }
-  .budget-btn.active .lbl { color: rgba(200,240,96,0.5); }
+  /* Budget min-max */
+  .budget-row { display: flex; gap: 10px; align-items: flex-end; }
+  .budget-field { flex: 1; }
+  .budget-field label { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-bottom: 5px; }
+  .budget-field .input-wrap { position: relative; }
+  .budget-field .peso { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--muted); pointer-events: none; }
+  .budget-field input {
+    width: 100%; padding: 10px 13px 10px 24px;
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text); outline: none;
+    transition: border-color 0.15s;
+    -moz-appearance: textfield;
+  }
+  .budget-field input::-webkit-outer-spin-button,
+  .budget-field input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .budget-field input:focus { border-color: rgba(200,240,96,0.4); }
+  .budget-field input::placeholder { color: var(--faint2); font-weight: 400; }
+  .budget-sep { color: var(--faint2); font-size: 18px; padding-bottom: 10px; flex-shrink: 0; }
 
-  /* Primary CTA button */
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #2a1a1a; border: 1px solid rgba(226,75,74,0.4); color: #F09595;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    padding: 10px 18px; border-radius: 100px;
+    opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; z-index: 999;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* CTA */
   .submit-btn { width: 100%; padding: 14px; background: var(--accent); color: #0A0A08; border: none; border-radius: var(--radius); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .submit-btn:hover { background: #d4f570; transform: translateY(-1px); }
   .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
   .spinner { width: 15px; height: 15px; border: 2px solid rgba(10,10,8,0.3); border-top-color: #0A0A08; border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ════════════════════════════════════════
-     RESULT CARDS
-  ════════════════════════════════════════ */
+  /* ── RESULT CARDS ── */
   .results-section { margin-top: 1.75rem; }
   .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
   .results-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
@@ -266,8 +253,6 @@
 
   .result-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 10px; animation: fadeUp 0.35s ease both; position: relative; overflow: hidden; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* Top accent line — glows on the best pick card */
   .result-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--border); }
   .result-card.best::before { background: linear-gradient(90deg, transparent, var(--accent), transparent); }
   .result-card.best { border-color: rgba(200,240,96,0.2); }
@@ -277,7 +262,7 @@
   .rc-rank { display: inline-flex; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px; padding: 2px 7px; border-radius: 4px; }
   .rank-best   { background: rgba(200,240,96,0.12); color: var(--accent); border: 1px solid rgba(200,240,96,0.25); }
   .rank-runner { background: rgba(232,184,75,0.12); color: var(--gold);   border: 1px solid rgba(232,184,75,0.25); }
-  .rank-alt    { background: var(--surface2);        color: var(--muted);  border: 1px solid var(--border); }
+  .rank-alt    { background: var(--surface2);       color: var(--muted);  border: 1px solid var(--border); }
 
   .rc-name { font-family: 'Instrument Serif', serif; font-size: 20px; color: var(--text); line-height: 1.2; margin-bottom: 2px; }
   .rc-type { font-size: 10px; color: var(--faint2); font-family: 'IBM Plex Mono', monospace; }
@@ -287,10 +272,8 @@
 
   .rc-specs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
   .spec { font-size: 10px; padding: 3px 9px; border-radius: 4px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace; }
-
   .rc-why { font-size: 12px; color: var(--muted); line-height: 1.65; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
 
-  /* Affiliate buy buttons */
   .buy-row { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
   .buy-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; transition: all 0.15s; font-family: 'Syne', sans-serif; }
   .buy-btn:hover { transform: translateY(-1px); }
@@ -298,7 +281,6 @@
   .buy-lazada { background: var(--lazada); color: #fff; }
   .buy-label { font-size: 10px; color: var(--faint2); font-family: 'IBM Plex Mono', monospace; font-style: italic; margin-left: auto; }
 
-  /* Loading state while AI is thinking */
   .loading-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; text-align: center; }
   .loading-text { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); margin-top: .75rem; }
   .loading-bar { width: 160px; height: 2px; background: var(--border); border-radius: 2px; margin: .75rem auto 0; overflow: hidden; }
@@ -307,29 +289,17 @@
 
   .error-box { background: rgba(226,75,74,0.08); border: 1px solid rgba(226,75,74,0.2); border-radius: var(--radius); padding: 1rem 1.25rem; color: #F09595; font-size: 12px; font-family: 'IBM Plex Mono', monospace; }
 
-  /* ── Mobile responsive ── */
+  /* ── MOBILE ── */
   @media (max-width: 768px) {
     .phone-col { display: none; }
     .intro-stage { display: none !important; }
-
-    .layout {
-      flex-direction: column;
-      padding: 0 1rem;
-    }
-
-    .form-col {
-      padding: 2rem 0 4rem;
-      opacity: 1 !important;
-      transform: none !important;
-    }
-
+    .layout { flex-direction: column; padding: 0 1rem; }
+    .form-col { padding: 2rem 0 4rem; opacity: 1 !important; transform: none !important; }
     .hero-title { font-size: 28px; }
-
-    .budget-grid { grid-template-columns: repeat(2, 1fr); }
-
+    .budget-row { flex-direction: column; gap: 8px; }
+    .budget-sep { display: none; }
     .rc-name { font-size: 16px; }
     .rc-price { font-size: 16px; }
-
     .buy-row { flex-direction: column; align-items: stretch; }
     .buy-btn { justify-content: center; }
     .buy-label { margin-left: 0; text-align: center; }
@@ -341,13 +311,9 @@
 <div class="noise"></div>
 <div class="glow-tl"></div>
 <div class="glow-br"></div>
+<div class="toast" id="toast"></div>
 
-<!-- ════════════════════════════════════════
-     INTRO OVERLAY
-     Shown on load, hidden after animation.
-     Contains the phone that zooms in then
-     slides left into its column position.
-════════════════════════════════════════ -->
+<!-- INTRO OVERLAY -->
 <div class="intro-stage" id="introStage">
   <div class="phone-positioner" id="phonePositioner">
     <div class="phone">
@@ -355,28 +321,39 @@
       <div class="phone-screen">
         <div class="phone-logo">
           <div class="phone-logo-mark">
-            <svg width="11" height="11" viewBox="0 0 18 18" fill="none">
+            <svg width="9" height="9" viewBox="0 0 18 18" fill="none">
               <path d="M9 2L3 6v6l6 4 6-4V6L9 2z" fill="#0A0A08"/>
               <circle cx="9" cy="9" r="2.5" fill="#0A0A08"/>
             </svg>
           </div>
           <div class="phone-logo-text">Gadget<span>Pick</span></div>
         </div>
-        <div class="phone-chip-row">
-          <div class="phone-chip on w1"></div>
-          <div class="phone-chip w2"></div>
-          <div class="phone-chip w3"></div>
-          <div class="phone-chip w2"></div>
+        <div class="phone-section">
+          <div class="phone-section-label">Type</div>
+          <div class="phone-mini-chips">
+            <div class="phone-mini-chip active">Smartphone</div>
+            <div class="phone-mini-chip">Laptop</div>
+            <div class="phone-mini-chip">Tablet</div>
+          </div>
         </div>
-        <!-- Bars animate in staggered to simulate loading -->
-        <div class="phone-bar"><div class="phone-bar-fill pf1"></div></div>
-        <div class="phone-bar"><div class="phone-bar-fill pf2"></div></div>
-        <div class="phone-bar"><div class="phone-bar-fill pf3"></div></div>
-        <div class="phone-card">
-          <div class="pcl ac"></div><div class="pcl"></div><div class="pcl sh"></div>
+        <div class="phone-section">
+          <div class="phone-section-label">Use</div>
+          <div class="phone-mini-chips">
+            <div class="phone-mini-chip active">Social</div>
+            <div class="phone-mini-chip">Gaming</div>
+            <div class="phone-mini-chip">Work</div>
+          </div>
         </div>
-        <div class="phone-card" style="margin-top:6px">
-          <div class="pcl"></div><div class="pcl sh"></div>
+        <div class="phone-section">
+          <div class="phone-section-label">Budget</div>
+          <div class="phone-budget-row">
+            <div class="phone-budget-box">₱ Min</div>
+            <div class="phone-budget-box">₱ Max</div>
+          </div>
+        </div>
+        <div class="phone-section">
+          <div class="phone-section-label">Specific</div>
+          <div class="phone-mini-input">e.g. long battery...</div>
         </div>
       </div>
       <div class="phone-glow"></div>
@@ -384,49 +361,57 @@
   </div>
 </div>
 
-<!-- ════════════════════════════════════════
-     MAIN LAYOUT — two columns side by side
-════════════════════════════════════════ -->
+<!-- MAIN LAYOUT -->
 <div class="layout">
 
-  <!-- LEFT COLUMN: sticky decorative phone -->
+  <!-- LEFT: sticky phone -->
   <div class="phone-col" id="phoneCol">
     <div class="phone" id="stickyPhone">
       <div class="phone-notch"></div>
       <div class="phone-screen">
         <div class="phone-logo">
           <div class="phone-logo-mark">
-            <svg width="11" height="11" viewBox="0 0 18 18" fill="none">
+            <svg width="9" height="9" viewBox="0 0 18 18" fill="none">
               <path d="M9 2L3 6v6l6 4 6-4V6L9 2z" fill="#0A0A08"/>
               <circle cx="9" cy="9" r="2.5" fill="#0A0A08"/>
             </svg>
           </div>
           <div class="phone-logo-text">Gadget<span>Pick</span></div>
         </div>
-        <div class="phone-chip-row">
-          <div class="phone-chip on w1"></div>
-          <div class="phone-chip w2"></div>
-          <div class="phone-chip w3"></div>
-          <div class="phone-chip w2"></div>
+        <div class="phone-section" id="ps-type">
+          <div class="phone-section-label">Type</div>
+          <div class="phone-mini-chips" id="pm-type-chips">
+            <div class="phone-mini-chip active">Smartphone</div>
+            <div class="phone-mini-chip">Laptop</div>
+            <div class="phone-mini-chip">Tablet</div>
+            <div class="phone-mini-chip">TWS</div>
+          </div>
         </div>
-        <!-- Static bars at full width (no animation needed here) -->
-        <div class="phone-bar"><div class="phone-bar-fill" style="width:75%"></div></div>
-        <div class="phone-bar"><div class="phone-bar-fill" style="width:52%"></div></div>
-        <div class="phone-bar"><div class="phone-bar-fill" style="width:88%"></div></div>
-        <div class="phone-card">
-          <div class="pcl ac"></div><div class="pcl"></div><div class="pcl sh"></div>
+        <div class="phone-section" id="ps-use">
+          <div class="phone-section-label">Use</div>
+          <div class="phone-mini-chips" id="pm-use-chips">
+            <div class="phone-mini-chip active">Social</div>
+            <div class="phone-mini-chip">Work</div>
+            <div class="phone-mini-chip">Gaming</div>
+          </div>
         </div>
-        <div class="phone-card" style="margin-top:6px">
-          <div class="pcl"></div><div class="pcl sh"></div>
+        <div class="phone-section" id="ps-budget">
+          <div class="phone-section-label">Budget</div>
+          <div class="phone-budget-row">
+            <div class="phone-budget-box" id="pm-min">₱ Min</div>
+            <div class="phone-budget-box" id="pm-max">₱ Max</div>
+          </div>
+        </div>
+        <div class="phone-section" id="ps-specific">
+          <div class="phone-section-label">Specific</div>
+          <div class="phone-mini-input" id="pm-specific">e.g. long battery...</div>
         </div>
       </div>
       <div class="phone-glow"></div>
-      <!-- Animated highlight bar — moves to mirror which step is hovered -->
-      <div class="phone-highlight" id="phoneHighlight"></div>
     </div>
   </div>
 
-  <!-- RIGHT COLUMN: scrollable form and results -->
+  <!-- RIGHT: form -->
   <div class="form-col" id="formCol">
 
     <div class="topbar">
@@ -454,11 +439,10 @@
       <p class="hero-sub">Tell us your budget and what you need it for — our AI handles the research. Free for everyone.</p>
     </div>
 
-    <!-- Step 1: Gadget type -->
     <div class="step-form">
-      <div class="step" data-step="1">
+
+      <div class="step" data-phone-section="ps-type">
         <div class="step-header">
-          <span class="step-num">01</span>
           <span class="step-title">What type of gadget?</span>
         </div>
         <div class="step-body">
@@ -473,10 +457,8 @@
         </div>
       </div>
 
-      <!-- Step 2: Use case -->
-      <div class="step" data-step="2">
+      <div class="step" data-phone-section="ps-use">
         <div class="step-header">
-          <span class="step-num">02</span>
           <span class="step-title">What will you use it for?</span>
         </div>
         <div class="step-body">
@@ -490,45 +472,41 @@
         </div>
       </div>
 
-      <!-- Step 3: Optional free-text preferences -->
-      <div class="step" data-step="3">
+      <div class="step" data-phone-section="ps-budget">
         <div class="step-header">
-          <span class="step-num">03</span>
-          <span class="step-title">Anything specific? <span style="color:var(--faint2);font-weight:400">(optional)</span></span>
-        </div>
-        <div class="step-body">
-          <input
-            class="text-input"
-            type="text"
-            id="specific-input"
-            placeholder="e.g. long battery life, lightweight, great camera..."
-          />
-        </div>
-      </div>
-
-      <!-- Step 4: Budget -->
-      <div class="step" data-step="4">
-        <div class="step-header">
-          <span class="step-num">04</span>
           <span class="step-title">Your budget?</span>
         </div>
         <div class="step-body">
-          <div class="budget-grid">
-            <div class="budget-btn" data-val="₱5,000 to ₱10,000">
-              <div class="amt">₱5k–10k</div><div class="lbl">Entry</div>
+          <div class="budget-row">
+            <div class="budget-field">
+              <label>Minimum</label>
+              <div class="input-wrap">
+                <span class="peso">₱</span>
+                <input type="number" id="budget-min" placeholder="5,000" min="0">
+              </div>
             </div>
-            <div class="budget-btn active" data-val="₱10,000 to ₱20,000">
-              <div class="amt">₱10k–20k</div><div class="lbl">Mid-range</div>
-            </div>
-            <div class="budget-btn" data-val="₱20,000 to ₱40,000">
-              <div class="amt">₱20k–40k</div><div class="lbl">Premium</div>
-            </div>
-            <div class="budget-btn" data-val="over ₱40,000">
-              <div class="amt">₱40k+</div><div class="lbl">Flagship</div>
+            <div class="budget-sep">—</div>
+            <div class="budget-field">
+              <label>Maximum</label>
+              <div class="input-wrap">
+                <span class="peso">₱</span>
+                <input type="number" id="budget-max" placeholder="20,000" min="0">
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="step" data-phone-section="ps-specific">
+        <div class="step-header">
+          <span class="step-title">Anything specific? <span style="color:var(--faint2);font-weight:400">(optional)</span></span>
+        </div>
+        <div class="step-body">
+          <input class="text-input" type="text" id="specific-input"
+            placeholder="e.g. long battery life, Samsung, lightweight, great camera..."/>
+        </div>
+      </div>
+
     </div>
 
     <button class="submit-btn" id="find-btn" onclick="findGadget()">
@@ -536,44 +514,30 @@
     </button>
 
     <div id="results-area"></div>
-
-  </div><!-- end .form-col -->
-</div><!-- end .layout -->
+  </div>
+</div>
 
 <script>
-  /* ════════════════════════════════════════
-     AFFILIATE CONFIGURATION
-     Replace these with your real IDs from:
-     Shopee: https://affiliate.shopee.ph
-     Lazada: https://affiliate.lazada.com.ph
-  ════════════════════════════════════════ */
   const SHOPEE_AFFILIATE_ID = 'SHOPEE_ID_HERE';
   const LAZADA_AFFILIATE_ID = 'LAZADA_ID_HERE';
 
-  /* Build search URLs with affiliate tracking */
-  function buildShopeeLink(query) {
-    return `https://shopee.ph/search?keyword=${encodeURIComponent(query)}&affiliate_id=${SHOPEE_AFFILIATE_ID}`;
-  }
-  function buildLazadaLink(query) {
-    return `https://www.lazada.com.ph/catalog/?q=${encodeURIComponent(query)}&af=${LAZADA_AFFILIATE_ID}`;
+  function buildShopeeLink(q) { return `https://shopee.ph/search?keyword=${encodeURIComponent(q)}&affiliate_id=${SHOPEE_AFFILIATE_ID}`; }
+  function buildLazadaLink(q) { return `https://www.lazada.com.ph/catalog/?q=${encodeURIComponent(q)}&af=${LAZADA_AFFILIATE_ID}`; }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  /* ════════════════════════════════════════
-     INTRO ANIMATION SEQUENCE
-     1. Phone zooms in to screen center     (~0.3s–1.4s)
-     2. Bars animate inside phone screen    (~1.3s–2.0s)
-     3. Phone slides left to column position (~2.2s)
-     4. Intro overlay is removed
-     5. Left phone column fades in
-     6. Form slides in from the right       (~80ms after phone)
-  ════════════════════════════════════════ */
+  /* ── INTRO ANIMATION ── */
   window.addEventListener('load', () => {
-    const introStage  = document.getElementById('introStage');
-    const positioner  = document.getElementById('phonePositioner');
-    const phoneCol    = document.getElementById('phoneCol');
-    const formCol     = document.getElementById('formCol');
+    const introStage = document.getElementById('introStage');
+    const positioner = document.getElementById('phonePositioner');
+    const phoneCol   = document.getElementById('phoneCol');
+    const formCol    = document.getElementById('formCol');
 
-    // Skip intro animation on mobile
     if (window.innerWidth <= 768) {
       introStage.classList.add('done');
       formCol.style.opacity = '1';
@@ -582,98 +546,91 @@
     }
 
     setTimeout(() => {
-      /* Calculate the horizontal center of the left phone column so the
-         intro phone slides exactly on top of the sticky phone */
       const colRect    = phoneCol.getBoundingClientRect();
-      const targetLeft = colRect.left + colRect.width / 2 - 100; /* 100 = half phone width (200px) */
-
+      const targetLeft = colRect.left + colRect.width / 2 - 100;
       positioner.style.setProperty('--phone-final-left', targetLeft + 'px');
       positioner.classList.add('slide-to-left');
-
-      /* After slide completes, swap intro overlay for the real layout */
       setTimeout(() => {
         introStage.classList.add('done');
         phoneCol.classList.add('visible');
-
-        /* Slight delay so the form slides in just after the phone settles */
         setTimeout(() => formCol.classList.add('visible'), 80);
       }, 750);
-
     }, 2200);
   });
 
-  /* ════════════════════════════════════════
-     PHONE HIGHLIGHT SYNC
-     When the user hovers a form step, a
-     lime accent bar slides to the matching
-     position on the decorative phone.
-  ════════════════════════════════════════ */
-  const steps         = document.querySelectorAll('.step');
-  const highlight     = document.getElementById('phoneHighlight');
-  const phoneHeight   = 390;
-  /* Approximate vertical positions (as fraction of phone height) for each step */
-  const stepPositions = [0.30, 0.45, 0.60, 0.74];
-
-  steps.forEach((step, i) => {
+  /* ── PHONE SECTION HIGHLIGHT ── */
+  document.querySelectorAll('.step').forEach(step => {
+    const ps = document.getElementById(step.dataset.phoneSection);
     step.addEventListener('mouseenter', () => {
-      highlight.style.top     = (stepPositions[i] * phoneHeight) + 'px';
-      highlight.style.opacity = '1';
+      document.querySelectorAll('.phone-section').forEach(s => s.classList.remove('highlighted'));
+      if (ps) ps.classList.add('highlighted');
     });
     step.addEventListener('mouseleave', () => {
-      highlight.style.opacity = '0';
+      if (ps) ps.classList.remove('highlighted');
     });
   });
 
-  /* ════════════════════════════════════════
-     FORM STATE
-     Track the user's current selections.
-  ════════════════════════════════════════ */
-  let selectedType   = 'Smartphone';
-  let selectedUse    = 'social media and videos';
-  let selectedBudget = '₱10,000 to ₱20,000';
+  /* ── FORM STATE ── */
+  let selectedType = 'Smartphone';
+  let selectedUse  = 'social media and videos';
 
-  /* Single-select chip groups */
+  const typeShortMap = { 'Smartphone': 'Smartphone', 'Laptop': 'Laptop', 'Tablet': 'Tablet', 'TWS Earphones': 'TWS', 'Smartwatch': 'Watch', 'Camera': 'Camera' };
   document.querySelectorAll('#type-chips .chip').forEach(chip => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('#type-chips .chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       selectedType = chip.dataset.val;
+      const short = typeShortMap[chip.dataset.val] || chip.dataset.val.split(' ')[0];
+      document.querySelectorAll('#pm-type-chips .phone-mini-chip').forEach(pc => {
+        pc.classList.toggle('active', pc.textContent === short);
+      });
     });
   });
+
+  const useShortMap = { 'social media and videos': 'Social', 'work or school': 'Work', 'gaming': 'Gaming', 'photography and content creation': 'Photo', 'music and entertainment': 'Music' };
   document.querySelectorAll('#use-chips .chip').forEach(chip => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('#use-chips .chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       selectedUse = chip.dataset.val;
-    });
-  });
-  document.querySelectorAll('.budget-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.budget-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedBudget = btn.dataset.val;
+      const short = useShortMap[chip.dataset.val] || chip.dataset.val.split(' ')[0];
+      document.querySelectorAll('#pm-use-chips .phone-mini-chip').forEach(pc => {
+        pc.classList.toggle('active', pc.textContent === short);
+      });
     });
   });
 
-  /* ════════════════════════════════════════
-     AI RECOMMENDATION
-     Calls the Anthropic API with the user's
-     selections. Claude returns a JSON array
-     of 3 gadget recommendations.
+  document.getElementById('budget-min').addEventListener('input', function() {
+    document.getElementById('pm-min').textContent = this.value ? '₱' + Number(this.value).toLocaleString() : '₱ Min';
+  });
+  document.getElementById('budget-max').addEventListener('input', function() {
+    document.getElementById('pm-max').textContent = this.value ? '₱' + Number(this.value).toLocaleString() : '₱ Max';
+  });
+  document.getElementById('specific-input').addEventListener('input', function() {
+    document.getElementById('pm-specific').textContent = this.value || 'e.g. long battery...';
+  });
 
-     NOTE: In production, move the API call
-     to a backend (e.g. Vercel serverless
-     function) so your API key is not exposed
-     in the browser.
-  ════════════════════════════════════════ */
+  /* ── AI RECOMMENDATION ── */
   async function findGadget() {
+    const budgetMin = document.getElementById('budget-min').value.trim();
+    const budgetMax = document.getElementById('budget-max').value.trim();
+
+    if (!budgetMin || !budgetMax) {
+      showToast('Please enter your min and max budget');
+      return;
+    }
+    if (Number(budgetMin) > Number(budgetMax)) {
+      showToast('Minimum budget cannot exceed maximum');
+      return;
+    }
+
     const btn      = document.getElementById('find-btn');
     const btnText  = document.getElementById('btn-text');
     const ra       = document.getElementById('results-area');
     const specific = document.getElementById('specific-input').value.trim();
+    const budgetStr = `₱${Number(budgetMin).toLocaleString()} to ₱${Number(budgetMax).toLocaleString()}`;
 
-    /* Show loading state */
-    btn.disabled  = true;
+    btn.disabled = true;
     btnText.innerHTML = '<span class="spinner"></span>';
     ra.innerHTML = `
       <div class="results-section">
@@ -684,10 +641,9 @@
         </div>
       </div>`;
 
-    /* Build the prompt — Claude responds with a clean JSON array */
-    const prompt = `You are a gadget expert for the Philippine market. Recommend 3 of the best ${selectedType} options for someone with a budget of ${selectedBudget}, who will use it for ${selectedUse}${specific ? ', and specifically wants: ' + specific : ''}.
+    const prompt = `You are a gadget expert for the Philippine market. Recommend 3 of the best ${selectedType} options for someone with a budget of ${budgetStr}, who will use it for ${selectedUse}${specific ? ', and specifically wants: ' + specific : ''}.
 
-Consider gadgets currently available in the Philippines (Shopee, Lazada, local stores). Prices must be in Philippine Peso.
+Consider gadgets currently available in the Philippines (Shopee, Lazada, local stores). Prices must be in Philippine Peso and within the given budget range.
 
 Reply ONLY with a JSON array — no other text, no markdown fences:
 [
@@ -702,24 +658,21 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
     "shopee_search": "exact search term to use on Shopee",
     "lazada_search": "exact search term to use on Lazada"
   },
-  { "rank": "Runner-up",    ... },
-  { "rank": "Budget pick",  ... }
+  { "rank": "Runner-up", "name": "...", "type": "...", "price": "...", "specs": [], "match": "...", "why": "...", "shopee_search": "...", "lazada_search": "..." },
+  { "rank": "Budget pick", "name": "...", "type": "...", "price": "...", "specs": [], "match": "...", "why": "...", "shopee_search": "...", "lazada_search": "..." }
 ]`;
 
     try {
-      /* API call goes through /api/recommend (Vercel serverless function)
-         so the Anthropic API key stays hidden on the server side */
       const response = await fetch('/api/recommend', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt })
       });
-
       const data    = await response.json();
       const rawText = data.text || '';
+      if (!rawText) throw new Error('Empty response from AI');
       const gadgets = JSON.parse(rawText.replace(/```json|```/g, '').trim());
 
-      /* Render results */
       ra.innerHTML = `
         <div class="results-section">
           <div class="results-header">
@@ -730,8 +683,8 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
 
       gadgets.forEach((gadget, index) => {
         const rankClass = index === 0 ? 'rank-best' : index === 1 ? 'rank-runner' : 'rank-alt';
-        const card      = document.createElement('div');
-        card.className       = index === 0 ? 'result-card best' : 'result-card';
+        const card = document.createElement('div');
+        card.className = index === 0 ? 'result-card best' : 'result-card';
         card.style.animationDelay = (index * 0.12) + 's';
         card.innerHTML = `
           <div class="rc-top">
@@ -745,9 +698,7 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
               <div class="rc-match">${gadget.match}</div>
             </div>
           </div>
-          <div class="rc-specs">
-            ${gadget.specs.map(s => `<span class="spec">${s}</span>`).join('')}
-          </div>
+          <div class="rc-specs">${gadget.specs.map(s => `<span class="spec">${s}</span>`).join('')}</div>
           <div class="rc-why">${gadget.why}</div>
           <div class="buy-row">
             <a href="${buildShopeeLink(gadget.shopee_search || gadget.name)}" target="_blank" class="buy-btn buy-shopee">
@@ -767,8 +718,7 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
       ra.innerHTML = `<div class="error-box">// ERROR: Could not load recommendations. Please try again.</div>`;
     }
 
-    /* Re-enable button */
-    btn.disabled      = false;
+    btn.disabled = false;
     btnText.textContent = 'Search again';
   }
 </script>
