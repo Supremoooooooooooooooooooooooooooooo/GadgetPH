@@ -679,8 +679,15 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
         body: JSON.stringify({ prompt })
       });
 
-      const data    = await response.json();
+      const data = await response.json();
       const rawText = data.text || '';
+      
+      // TEMP DEBUG
+      console.log('Server response:', data);
+      console.log('Raw text:', rawText);
+      
+      if (!rawText) throw new Error('Empty response from AI: ' + JSON.stringify(data));
+      
       const gadgets = JSON.parse(rawText.replace(/```json|```/g, '').trim());
 
       /* Render results */
