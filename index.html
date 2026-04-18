@@ -616,7 +616,7 @@
     const budgetMax = document.getElementById('budget-max').value.trim();
 
     if (!budgetMin || !budgetMax) {
-      showToast('Please enter your min and max budget');
+      showToast('Please enter your budget');
       return;
     }
     if (Number(budgetMin) > Number(budgetMax)) {
