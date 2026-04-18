@@ -680,7 +680,7 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
       });
 
       const data    = await response.json();
-      const rawText = data.content?.[0]?.text || '';
+      const rawText = data.text || '';
       const gadgets = JSON.parse(rawText.replace(/```json|```/g, '').trim());
 
       /* Render results */
