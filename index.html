@@ -728,7 +728,8 @@ Reply ONLY with a JSON array — no other text, no markdown fences:
       });
 
     } catch (err) {
-      ra.innerHTML = `<div class="error-box">// ERROR: Could not load recommendations. Please try again.</div>`;
+      ra.innerHTML = `<div class="error-box">// ERROR: ${err.message}</div>`;
+      console.error('Full error:', err);
     }
 
     /* Re-enable button */
