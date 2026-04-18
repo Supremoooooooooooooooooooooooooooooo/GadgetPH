@@ -27,10 +27,12 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+const data = await response.json();
 
-    // Extract the text from Gemini's response format
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+// TEMP DEBUG — tanggalin mo ito pagkatapos
+console.log('Gemini raw response:', JSON.stringify(data));
+
+const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     res.status(200).json({ text });
 
